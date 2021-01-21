@@ -1,0 +1,1153 @@
+openapi: 3.0.3
+info:
+  title: University
+  description: University specification API
+  version: 1.0.0
+  contact:
+    name: API Botalov Anton
+    email: botalovanton@gmail.com
+servers:
+  - url: http://localhost:8080
+
+tags:
+  - name: course
+    description: Everything about academic disciplines
+  - name: department
+    description: Everything about departments of university
+  - name: group
+    description: Everything about study groups
+  - name: student
+    description: Everything about students
+  - name: teacher
+    description: Everything about teacher
+  - name: lesson
+    description: Everything about lessons
+
+paths:
+  /course:
+    post:
+      tags:
+        - course
+      summary: Add course
+      description: Allows you to add a new academic discipline to the database
+      operationId: addCourse
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/courseDto'
+        required: true
+      responses:
+        201:
+          description: course created
+        400:
+          description: validation exception
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'error message'
+
+    get:
+      tags:
+        - course
+      summary: All courses
+      description: Returns a list of all courses
+      operationId: getAllCourses
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/courseDto'
+
+  /course/{id}:
+    get:
+      tags:
+        - course
+      summary: find course
+      description: get course by id
+      operationId: getCourseById
+      parameters:
+        - name: id
+          required: true
+          schema:
+            type: string
+            example: '999'
+          in: path
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/courseDto'
+        404:
+          description: course not found
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'course with id 999 not found'
+
+    delete:
+      tags:
+        - course
+      summary: delete course
+      description: delete an existing course
+      operationId: deleteCourse
+      parameters:
+        - name: id
+          required: true
+          schema:
+            type: string
+            example: '999'
+          in: path
+      responses:
+        204:
+          description: successful course deletion
+
+    put:
+      tags:
+        - course
+      summary: update course
+      description: update an existing course
+      operationId: updateCourse
+      parameters:
+        - name: id
+          required: true
+          schema:
+            type: string
+            example: 999
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/courseDto'
+        required: true
+      responses:
+        204:
+          description: successful operation
+        400:
+          description: validation exception
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'error message'
+
+  /course/filter:
+    get:
+      tags:
+        - course
+      summary: find by filter
+      description: get a list of courses by specified filters
+      operationId: getFilteredCourses
+      parameters:
+        - name: courseId
+          required: false
+          schema:
+            type: string
+            example: '999'
+          in: query
+        - name: courseName
+          required: false
+          schema:
+            type: string
+            example: 'Programming'
+          in: query
+        - name: departmentId
+          required: false
+          schema:
+            type: string
+            example: '999'
+          in: query
+        - name: departmentName
+          required: false
+          schema:
+            type: string
+            example: 'Department of economics'
+          in: query
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/courseDto'
+
+
+  /group:
+    post:
+      tags:
+        - group
+      summary: Add group
+      description: Allows you to add a new study group to the database
+      operationId: addGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/groupDto'
+        required: true
+      responses:
+        201:
+          description: group created
+        400:
+          description: validation exception
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'error message'
+
+
+    get:
+      tags:
+        - group
+      summary: All groups
+      description: Returns a list of all groups
+      operationId: getAllGroups
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/groupDto'
+
+  /group/{id}:
+    get:
+      tags:
+        - group
+      summary: find group
+      description: get group by id
+      operationId: getGroupById
+      parameters:
+        - name: id
+          required: true
+          schema:
+            type: string
+            example: 999
+          in: path
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/groupDto'
+        404:
+          description: group not found
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'group with id 999 not found'
+
+    delete:
+      tags:
+        - group
+      summary: delete group
+      description: delete an existing group
+      operationId: deleteGroup
+      parameters:
+        - name: id
+          required: true
+          schema:
+            type: string
+            example: 999
+          in: path
+      responses:
+        204:
+          description: successful group deletion
+
+    put:
+      tags:
+        - group
+      summary: update group
+      description: update an existing group
+      operationId: updateGroup
+      parameters:
+        - name: id
+          required: true
+          schema:
+            type: string
+            example: 999
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/groupDto'
+        required: true
+      responses:
+        204:
+          description: successful operation
+        400:
+          description: validation exception
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'error message'
+
+  /group/filter:
+    get:
+      tags:
+        - group
+      summary: find by filter
+      description: get a list of groups by specified filters
+      operationId: getFilteredGroups
+      parameters:
+        - name: groupId
+          in: query
+          required: false
+          schema:
+            type: string
+            example: '999'
+        - name: groupName
+          in: query
+          required: false
+          schema:
+            type: string
+            example: 'QWE-365'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/groupDto'
+
+
+  /department:
+    post:
+      tags:
+        - department
+      summary: Add department
+      description: Allows you to add a new department to the database
+      operationId: addDepartment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/departmentDto'
+        required: true
+      responses:
+        201:
+          description: department created
+        400:
+          description: validation exception
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'error message'
+
+    get:
+      tags:
+        - department
+      summary: All departments
+      description: Returns a list of all departments
+      operationId: getAllDepartments
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/departmentDto'
+
+  /department/{id}:
+    get:
+      tags:
+        - department
+      summary: find department
+      description: get department by id
+      operationId: getDepartmentById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: '999'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/departmentDto'
+        404:
+          description: department not found
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'department with id 999 not found'
+
+    delete:
+      tags:
+        - department
+      summary: delete department
+      description: delete an existing department
+      operationId: deleteDepartment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: '999'
+      responses:
+        204:
+          description: successful department deletion
+
+    put:
+      tags:
+        - department
+      summary: update department
+      description: update an existing department
+      operationId: updateDepartment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: '999'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/departmentDto'
+        required: true
+      responses:
+        204:
+          description: successful operation
+        400:
+          description: validation exception
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'error message'
+
+  /department/filter:
+    get:
+      tags:
+        - department
+      summary: find by filter
+      description: get a list of departments by specified filters
+      operationId: getFilteredDepartments
+      parameters:
+        - name: departmentId
+          in: query
+          required: false
+          schema:
+            type: string
+            example: '999'
+        - name: departmentName
+          in: query
+          required: false
+          schema:
+            type: string
+            example: 'Department of economics'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/departmentDto'
+
+
+  /student:
+    post:
+      tags:
+        - student
+      summary: Add student
+      description: Allows you to add a new student to the database
+      operationId: addStudent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/studentDto'
+        required: true
+      responses:
+        201:
+          description: student created
+        400:
+          description: validation exception
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'error message'
+
+    get:
+      tags:
+        - student
+      summary: All students
+      description: Returns a list of all students
+      operationId: getAllStudents
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/studentDto'
+
+  /student/{id}:
+    get:
+      tags:
+        - student
+      summary: find student
+      description: get student by id
+      operationId: getStudentById
+      parameters:
+        - name: id
+          required: true
+          schema:
+            type: string
+            example: '999'
+          in: path
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/studentDto'
+        404:
+          description: student not found
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'student with id 999 not found'
+
+    delete:
+      tags:
+        - student
+      summary: delete student
+      description: delete an existing student
+      operationId: deleteStudent
+      parameters:
+        - name: id
+          required: true
+          schema:
+            type: string
+            example: '999'
+          in: path
+      responses:
+        204:
+          description: successful student deletion
+
+    put:
+      tags:
+        - student
+      summary: update student
+      description: update an existing student
+      operationId: updateStudent
+      parameters:
+        - name: id
+          required: true
+          schema:
+            type: string
+            example: '999'
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/studentDto'
+        required: true
+      responses:
+        204:
+          description: successful operation
+        400:
+          description: validation exception
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'error message'
+
+  /student/filter:
+    get:
+      tags:
+        - student
+      summary: find by filter
+      description: get a list of students by specified filters
+      operationId: getFilteredStudents
+      parameters:
+        - name: studentId
+          required: false
+          schema:
+            type: string
+            example: '999'
+          in: query
+        - name: studentFirstName
+          required: false
+          schema:
+            type: string
+            example: 'Ivan'
+          in: query
+        - name: studentLastName
+          required: false
+          schema:
+            type: string
+            example: 'Ivanov'
+          in: query
+        - name: groupId
+          required: false
+          schema:
+            type: string
+            example: '999'
+          in: query
+        - name: groupName
+          required: false
+          schema:
+            type: string
+            example: 'QWE-365'
+          in: query
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/studentDto'
+
+
+  /teacher:
+    post:
+      tags:
+        - teacher
+      summary: Add teacher
+      description: Allows you to add a new teacher to the database
+      operationId: addTeacher
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/teacherDto'
+        required: true
+      responses:
+        201:
+          description: teacher created
+        400:
+          description: validation exception
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'error message'
+
+    get:
+      tags:
+        - teacher
+      summary: All teachers
+      description: Returns a list of all teachers
+      operationId: getAllTeachers
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/teacherDto'
+
+  /teacher/{id}:
+    get:
+      tags:
+        - teacher
+      summary: find teacher
+      description: get teacher by id
+      operationId: getTeacherById
+      parameters:
+        - name: id
+          required: true
+          schema:
+            type: string
+            example: '999'
+          in: path
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/teacherDto'
+        404:
+          description: teacher not found
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'teacher with id 999 not found'
+
+    delete:
+      tags:
+        - teacher
+      summary: delete teacher
+      description: delete an existing teacher
+      operationId: deleteTeacher
+      parameters:
+        - name: id
+          required: true
+          schema:
+            type: string
+            example: '999'
+          in: path
+      responses:
+        204:
+          description: successful teacher deletion
+
+    put:
+      tags:
+        - teacher
+      summary: update teacher
+      description: update an existing teacher
+      operationId: updateTeacher
+      parameters:
+        - name: id
+          required: true
+          schema:
+            type: string
+            example: '999'
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/teacherDto'
+        required: true
+      responses:
+        204:
+          description: successful operation
+        400:
+          description: validation exception
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'error message'
+
+  /teacher/filter:
+    get:
+      tags:
+        - teacher
+      summary: find by filter
+      description: get a list of teachers by specified filters
+      operationId: getFilteredTeachers
+      parameters:
+        - name: teacherId
+          required: false
+          schema:
+            type: string
+            example: '999'
+          in: query
+        - name: teacherFirstName
+          required: false
+          schema:
+            type: string
+            example: 'Ivan'
+          in: query
+        - name: teacherLastName
+          required: false
+          schema:
+            type: string
+            example: 'Ivanov'
+          in: query
+        - name: departmentId
+          required: false
+          schema:
+            type: string
+            example: '999'
+          in: query
+        - name: departmentName
+          required: false
+          schema:
+            type: string
+            example: 'Department of economics'
+          in: query
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/teacherDto'
+
+
+  /lesson:
+    post:
+      tags:
+        - lesson
+      summary: Add lesson
+      description: Allows you to add a new lesson to the database
+      operationId: addLesson
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/lessonDto'
+        required: true
+      responses:
+        201:
+          description: lesson created
+        400:
+          description: validation exception
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'error message'
+
+    get:
+      tags:
+        - lesson
+      summary: All lessons
+      description: Returns a list of all lessons
+      operationId: getAllLessons
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/lessonDto'
+
+  /lesson/{id}:
+    get:
+      tags:
+        - lesson
+      summary: find lesson
+      description: get lesson by id
+      operationId: getLessonById
+      parameters:
+        - name: id
+          required: true
+          schema:
+            type: string
+            example: '999'
+          in: path
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/lessonDto'
+        404:
+          description: lesson not found
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'lesson with id 999 not found'
+
+    delete:
+      tags:
+        - lesson
+      summary: delete lesson
+      description: delete an existing lesson
+      operationId: deleteLesson
+      parameters:
+        - name: id
+          required: true
+          schema:
+            type: string
+            example: '999'
+          in: path
+      responses:
+        204:
+          description: successful lesson deletion
+
+    put:
+      tags:
+        - lesson
+      summary: update lesson
+      description: update an existing lesson
+      operationId: updateLesson
+      parameters:
+        - name: id
+          required: true
+          schema:
+            type: string
+            example: '999'
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/lessonDto'
+        required: true
+      responses:
+        204:
+          description: successful operation
+        400:
+          description: validation exception
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'error message'
+
+  /lesson/filter:
+    get:
+      tags:
+        - lesson
+      summary: find by filter
+      description: get a list of lesson by specified filters
+      operationId: getFilteredLessons
+      parameters:
+        - name: lessonId
+          required: false
+          schema:
+            type: string
+            example: '999'
+          in: query
+        - name: minStartTime
+          required: false
+          schema:
+            type: string
+            pattern: yyyy-MM-ddTHH:mm:ssZ
+            example: '2999-01-01T09:00:00Z'
+          in: query
+        - name: maxStartTime
+          required: false
+          schema:
+            type: string
+            pattern: yyyy-MM-ddTHH:mm:ssZ
+            example: '2999-01-01T10:30:00Z'
+          in: query
+        - name: courseId
+          required: false
+          schema:
+            type: string
+            example: '999'
+          in: query
+        - name: groupId
+          required: false
+          schema:
+            type: string
+            example: '999'
+          in: query
+        - name: teacherId
+          required: false
+          schema:
+            type: string
+            example: '999'
+          in: query
+        - name: classroom
+          required: false
+          schema:
+            type: string
+            example: '123'
+          in: query
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/lessonDto'
+
+
+components:
+  schemas:
+    courseDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          minItems: 1
+          uniqueItems: true
+          example: 999
+        name:
+          type: string
+          minLength: 3
+          maxLength: 30
+          uniqueItems: true
+          example: 'Programming'
+        departmentId:
+          type: integer
+          minItems: 1
+          example: 999
+        departmentName:
+          type: string
+          minLength: 3
+          maxLength: 15
+          example: 'Department of economics'
+
+    groupDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          minItems: 1
+          uniqueItems: true
+          example: 999
+        name:
+          type: string
+          minLength: 3
+          maxLength: 10
+          uniqueItems: true
+          example: 'QWE-345'
+
+    departmentDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          minItems: 1
+          uniqueItems: true
+          example: 999
+        name:
+          type: string
+          minLength: 3
+          maxLength: 15
+          uniqueItems: true
+          example: 'Department of economics'
+
+    studentDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          minItems: 1
+          uniqueItems: true
+          example: 999
+        firstName:
+          type: string
+          minLength: 3
+          maxLength: 15
+          example: 'Ivanov'
+        lastName:
+          type: string
+          minLength: 3
+          maxLength: 15
+          example: 'Ivanov'
+        groupId:
+          type: integer
+          minItems: 1
+          example: 999
+        groupName:
+          type: string
+          minLength: 3
+          maxLength: 15
+          example: 'QWE-345'
+
+    teacherDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          minItems: 1
+          example: 999
+        firstName:
+          type: string
+          minLength: 3
+          maxLength: 15
+          example: 'Ivan'
+        lastName:
+          type: string
+          minLength: 3
+          maxLength: 15
+          example: 'Ivanov'
+        departmentId:
+          type: integer
+          minItems: 1
+          example: 999
+        departmentName:
+          type: string
+          minLength: 3
+          maxLength: 15
+          example: 'Department of economics'
+
+    lessonDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          minItems: 1
+          uniqueItems: true
+          example: 999
+        start:
+          type: string
+          pattern: yyyy-MM-ddTHH:mm:ssZ
+          description: greater than current date and time
+          example: '2999-01-01T09:00:00Z'
+        end:
+          type: string
+          pattern: yyyy-MM-ddTHH:mm:ssZ
+          example: '2999-01-01T10:30:00Z'
+        courseId:
+          type: integer
+          minItems: 1
+          example: 999
+        courseName:
+          type: string
+          minLength: 3
+          maxLength: 15
+          example: 'Programming'
+        groupId:
+          type: integer
+          minItems: 1
+          example: 999
+        groupName:
+          type: string
+          minLength: 3
+          maxLength: 10
+          example: 'QWE-345'
+        teacherId:
+          type: integer
+          minItems: 1
+          example: 999
+        teacherFirstName:
+          type: string
+          minLength: 3
+          maxLength: 15
+          example: 'Ivan'
+        teacherLastName:
+          type: string
+          minLength: 3
+          maxLength: 15
+          example: 'Ivanov'
+        classroom:
+          type: integer
+          minItems: 1
+          example: 123
